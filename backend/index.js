@@ -23,11 +23,13 @@ app.get('/', (req, res) => {
 app.post('/addItem', async (req, res) => {
     const { id, name, content } = req.body;
     console.log('item: ', id, name, content);
-    await addItemToDB({ id, name, content });
+    const result = await addItemToDB({ id, name, content });
+    res.json(result);
 });
 
 app.get('/search', async (req, res) => {
     const items = await getItemsFromDB();
+    res.json(items);
 })
 
 app.listen(8000, () => {

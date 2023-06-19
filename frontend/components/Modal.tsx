@@ -2,7 +2,8 @@ import { Fragment, useState, useReducer } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { CheckIcon } from '@heroicons/react/24/outline'
 import TextareaAutosize from 'react-textarea-autosize';
-import { v4 } from 'uuid';
+import { addItem } from '../hooks/mutations';
+import { useMutation } from 'react-query';
 
 interface ContactFormProps {
     open: boolean
@@ -19,6 +20,7 @@ interface FormState {
 type FormAction =
     | { type: 'UPDATE_NAME'; payload: string }
     | { type: 'UPDATE_CONTENT'; payload: string }
+    | { type: 'RESET'; payload: FormState }
 
 // initial state
 const initialState: FormState = {
@@ -33,6 +35,8 @@ const formReducer = (state: FormState = initialState, action: FormAction): FormS
             return { ...state, name: action.payload };
         case 'UPDATE_CONTENT':
             return { ...state, content: action.payload };
+        case 'RESET':
+            return action.payload   // reset to initial state;
         default:
             return state;
     }
@@ -41,18 +45,21 @@ const formReducer = (state: FormState = initialState, action: FormAction): FormS
 export default function Modal({ open, setOpen }) {
     const [loading, setLoading] = useState(false)
     const [state, dispatchForm] = useReducer(formReducer, initialState);
-
+    const { mutate, isLoading } = useMutation(addItem, {
+        onSuccess: data => {
+            console.log(data);
+            dispatchForm({ type: 'RESET', payload: initialState })
+            setOpen(false)
+            setLoading(false)
+        },
+        onError: () => {
+            console.log("there was an error")
+            setLoading(false)
+        }
+    });
     const handleSubmit = async () => {
         setLoading(true)
-        const sendReq = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/addItem`, {
-            method: 'POST', body: JSON.stringify({ id: v4(), name: state.name, content: state.content }), headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        const res = await sendReq.json();
-        console.log('context res: ', res)
-        setOpen(false)
-        setLoading(false)
+        mutate(state)
     }
 
     return (

@@ -2,15 +2,21 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from '@next/font/google'
 import styles from '../styles/Home.module.css'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Modal from '../components/Modal'
+import { useItemsQuery } from '../hooks/queries'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function SearchText() {
   const [userInput, setUserInput] = useState<string>('')
   const [openModal, setOpenModal] = useState<boolean>(false)
+  const { data, error, isLoading } = useItemsQuery();
 
+  useEffect(() => {
+    console.log('data: ', data)
+  }, [data])
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     console.log('submit')
