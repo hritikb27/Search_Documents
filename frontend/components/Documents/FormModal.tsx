@@ -3,9 +3,9 @@ import { Dialog, Transition } from '@headlessui/react'
 import { CheckIcon } from '@heroicons/react/24/outline'
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/solid'
 import TextareaAutosize from 'react-textarea-autosize';
-import { addItem } from '../hooks/mutations';
+import { addItem } from '../../hooks/mutations';
 import { useMutation } from 'react-query';
-import { DynamicFieldsInterface, FormState, UploadFormProps } from '../interfaces/UploadModalInterface';
+import { DynamicFieldsInterface, FormState, UploadFormProps } from '../../interfaces/UploadModalInterface';
 import { v4 } from 'uuid'
 
 // Define the action types
@@ -34,7 +34,7 @@ const formReducer = (state: FormState = initialState, action: FormAction): FormS
     }
 };
 
-export default function Modal({ open, setOpen }: UploadFormProps) {
+export default function FormModal({ open, setOpen }: UploadFormProps) {
     const [loading, setLoading] = useState(false)
     const [state, dispatchForm] = useReducer(formReducer, initialState);
     const [dynamicFields, setDynamicFields] = useState<DynamicFieldsInterface[]>([])
@@ -66,10 +66,10 @@ export default function Modal({ open, setOpen }: UploadFormProps) {
     }
 
     const handleDynamicFieldChange = (e: React.ChangeEvent<HTMLInputElement>, type: string, id: string) => {
-        setDynamicFields(prevArray=>{
-            return prevArray.map(item=>{
-                if(item.id === id){
-                    return {...item, [type]: e.target.value}
+        setDynamicFields(prevArray => {
+            return prevArray.map(item => {
+                if (item.id === id) {
+                    return { ...item, [type]: e.target.value }
                 }
                 return item
             })
@@ -148,7 +148,7 @@ export default function Modal({ open, setOpen }: UploadFormProps) {
                                                                 return <div className='flex flex-col gap-5'>
                                                                     <input type={'text'} value={field.key} placeholder='key' onChange={(e) => handleDynamicFieldChange(e, 'key', field.id)} className='py-1.5 px-2 w-[60%] rounded-md bg-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 text-black border-transparent focus:border-transparent focus:ring-0' />
                                                                     <input type={'text'} value={field.value} placeholder='value' onChange={(e) => handleDynamicFieldChange(e, 'value', field.id)} className='py-1.5 px-2 rounded-md bg-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 text-black border-transparent focus:border-transparent focus:ring-0' />
-                                                                    <TrashIcon color='black' fontSize={'20px'} className='cursor-pointer text-sm w-8 h-8' onClick={()=>setDynamicFields(prev=>prev.filter(item=>item.id!==field.id))} />
+                                                                    <TrashIcon color='black' fontSize={'20px'} className='cursor-pointer text-sm w-8 h-8' onClick={() => setDynamicFields(prev => prev.filter(item => item.id !== field.id))} />
                                                                 </div>
                                                             })}
                                                         </div>}

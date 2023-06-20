@@ -1,4 +1,4 @@
-import { DocumentInterface } from "../interfaces/ItemInterface";
+import { DocumentInterface } from "../../interfaces/ItemInterface";
 import Highlighter from "react-highlight-words";
 
 type RenderDocsProps = {
@@ -19,7 +19,7 @@ const RenderDocs = ({ docs, query }: RenderDocsProps) => {
                         className="font-bold text-2xl"
                     />
                     {/* <h2 className="font-bold text-2xl">{doc.name}</h2> */}
-                    <br/>
+                    <br />
                     <Highlighter
                         highlightClassName="YourHighlightClass"
                         searchWords={[query]}
