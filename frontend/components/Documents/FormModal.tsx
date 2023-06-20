@@ -5,14 +5,8 @@ import { PlusIcon, TrashIcon } from '@heroicons/react/24/solid'
 import TextareaAutosize from 'react-textarea-autosize';
 import { addItem } from '../../hooks/mutations';
 import { useMutation } from 'react-query';
-import { DynamicFieldsInterface, FormState, UploadFormProps } from '../../interfaces/UploadModalInterface';
+import { DynamicFieldsInterface, FormAction, FormState, UploadFormProps } from '../../interfaces/UploadModalInterface';
 import { v4 } from 'uuid'
-
-// Define the action types
-type FormAction =
-    | { type: 'UPDATE_NAME'; payload: string }
-    | { type: 'UPDATE_CONTENT'; payload: string }
-    | { type: 'RESET'; payload: FormState }
 
 // initial state
 const initialState: FormState = {
@@ -38,6 +32,8 @@ export default function FormModal({ open, setOpen }: UploadFormProps) {
     const [loading, setLoading] = useState(false)
     const [state, dispatchForm] = useReducer(formReducer, initialState);
     const [dynamicFields, setDynamicFields] = useState<DynamicFieldsInterface[]>([])
+
+    // mutation hook for adding item to database
     const { mutate, isLoading } = useMutation(addItem, {
         onSuccess: data => {
             console.log(data);
@@ -50,6 +46,8 @@ export default function FormModal({ open, setOpen }: UploadFormProps) {
             setLoading(false)
         }
     });
+
+    // handle form submit
     const handleSubmit = async () => {
         let updateFormState = { ...state }
         dynamicFields.forEach(item => {
@@ -61,10 +59,12 @@ export default function FormModal({ open, setOpen }: UploadFormProps) {
         mutate(updateFormState)
     }
 
+    // handle adding dynamic fields
     const handleDynamicFields = () => {
         setDynamicFields(prevArray => [...prevArray, { key: '', value: '', id: v4() }])
     }
 
+    // handle changing dynamic fields' data
     const handleDynamicFieldChange = (e: React.ChangeEvent<HTMLInputElement>, type: string, id: string) => {
         setDynamicFields(prevArray => {
             return prevArray.map(item => {

@@ -17,12 +17,15 @@ export default function SearchText() {
   const { data, refetch, error, isLoading } = useItemsQuery(userInput);
 
   useEffect(() => {
+    // open loading spinner if data is null and isLoading is true
     if (!data && isLoading) setOpenLoadingModal(true)
+    // close loading spinner if data is not null and isLoading is false
     else setOpenLoadingModal(false)
   }, [data, isLoading])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    // refetch data
     refetch()
   }
 

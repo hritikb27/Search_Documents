@@ -14,3 +14,9 @@ export interface UploadFormProps {
     open: boolean
     setOpen: (open: boolean) => void
 }
+
+// Define the action types
+export type FormAction =
+    | { type: 'UPDATE_NAME'; payload: string }
+    | { type: 'UPDATE_CONTENT'; payload: string }
+    | { type: 'RESET'; payload: FormState }
