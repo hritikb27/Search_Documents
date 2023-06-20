@@ -8,7 +8,7 @@ type RenderDocsProps = {
 
 const RenderDocs = ({ docs, query }: RenderDocsProps) => {
     return (
-        <div className="w-[60%] divide-y">
+        <div className="w-full sm:w-[60%] divide-y">
             {docs.map((doc) => (
                 <div key={doc.id} className='text-black'>
                     <Highlighter

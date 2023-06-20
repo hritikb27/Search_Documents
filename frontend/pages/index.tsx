@@ -25,11 +25,11 @@ export default function SearchText() {
   }
 
   return (
-    <div className='bg-gray-200 h-screen flex flex-col items-center justify-start px-24 pt-4 gap-8'>
+    <div className='bg-gray-200 overflow-y-auto h-screen flex flex-col items-center justify-start px-24 pt-4 gap-8'>
       <h2 className='text-2xl text-gray-900 font-bold'>Search</h2>
 
-      <div className='w-full justify-center items-center gap-10  flex'>
-        <form onSubmit={handleSubmit} className='pt-2 relative w-[50%] text-gray-600'>
+      <div className='w-full flex flex-col sm:flex-row justify-center items-center gap-10  flex'>
+        <form onSubmit={handleSubmit} className='pt-2 relative w-[100%] sm:w-[50%] text-gray-600'>
           <input
             className="border-2 border-gray-300 w-full bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
             value={userInput}
@@ -56,7 +56,7 @@ export default function SearchText() {
             </svg>
           </button>
         </form>
-        <button onClick={()=>setOpenModal(true)} className="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold flex h-[80%] items-center justify-self-center px-4 rounded">
+        <button onClick={()=>setOpenModal(true)} className="sm:mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold flex h-[35px] sm:h-[80%] items-center justify-self-center px-4 rounded">
           Upload
         </button>
       </div>

@@ -6,7 +6,7 @@ export default function Document() {
       <Head>
         <title>Search Documents</title>
       </Head>
-      <body>
+      <body className='bg-[#e5e7eb]'>
         <Main />
         <NextScript />
       </body>
