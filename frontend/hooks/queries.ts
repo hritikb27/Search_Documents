@@ -1,8 +1,8 @@
 import { useQuery } from "react-query";
 
-const getItems = async () => {
+const getItems = async (query: string) => {
     try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/search`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/search?query=${query}`);
         const items = await response.json();
         return items;
     } catch (error) {
@@ -11,8 +11,8 @@ const getItems = async () => {
     }
 };
 
-const useItemsQuery = () => {
-    return useQuery(["items"], () => getItems());
+const useItemsQuery = (query: string) => {
+    return useQuery(["items"], () => getItems(query), { refetchOnWindowFocus: false, enabled: false });
 };
 
 

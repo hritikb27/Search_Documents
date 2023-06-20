@@ -5,36 +5,35 @@ import styles from '../styles/Home.module.css'
 import React, { useState, useEffect } from 'react'
 import Modal from '../components/Modal'
 import { useItemsQuery } from '../hooks/queries'
+import RenderDocs from '../components/RenderDocs'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function SearchText() {
   const [userInput, setUserInput] = useState<string>('')
   const [openModal, setOpenModal] = useState<boolean>(false)
-  const { data, error, isLoading } = useItemsQuery();
+  const { data, refetch, error, isLoading } = useItemsQuery(userInput);
 
   useEffect(() => {
     console.log('data: ', data)
   }, [data])
-  
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     console.log('submit')
-    const sendReq = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/addItem`, {
-      method: 'POST', body: JSON.stringify({ "item": 'testing-id' }), headers: {
-        'Content-Type': 'application/json'
-      }
-    })
+    refetch()
   }
 
   return (
     <div className='bg-gray-200 h-screen flex flex-col items-center justify-start px-24 pt-4 gap-8'>
       <h2 className='text-2xl text-gray-900 font-bold'>Search</h2>
 
-      <div className='w-full justify-center items-center gap-10 pl-24 flex'>
+      <div className='w-full justify-center items-center gap-10  flex'>
         <form onSubmit={handleSubmit} className='pt-2 relative w-[50%] text-gray-600'>
           <input
             className="border-2 border-gray-300 w-full bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+            value={userInput}
+            onChange={(e) => setUserInput(e.target.value)}
             type="search"
             name="search"
             placeholder="Search"
@@ -61,7 +60,9 @@ export default function SearchText() {
           Upload
         </button>
       </div>
+      {data && data.length > 0 && <span className='text-black flex gap-1'><p className='font-semibold'>{data.length} posts </p> <p>were found</p></span>}
       <Modal open={openModal} setOpen={setOpenModal} />
+      {data && data.length>0 && <RenderDocs docs={data || []} query={userInput} />}
     </div>
   )
 }

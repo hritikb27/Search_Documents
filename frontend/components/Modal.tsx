@@ -1,20 +1,12 @@
 import { Fragment, useState, useReducer } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { CheckIcon } from '@heroicons/react/24/outline'
+import { PlusIcon, TrashIcon } from '@heroicons/react/24/solid'
 import TextareaAutosize from 'react-textarea-autosize';
 import { addItem } from '../hooks/mutations';
 import { useMutation } from 'react-query';
-
-interface ContactFormProps {
-    open: boolean
-    setOpen: (open: boolean) => void
-}
-
-// Define the state type
-interface FormState {
-    name: string;
-    content: string;
-}
+import { DynamicFieldsInterface, FormState, UploadFormProps } from '../interfaces/UploadModalInterface';
+import { v4 } from 'uuid'
 
 // Define the action types
 type FormAction =
@@ -36,15 +28,16 @@ const formReducer = (state: FormState = initialState, action: FormAction): FormS
         case 'UPDATE_CONTENT':
             return { ...state, content: action.payload };
         case 'RESET':
-            return action.payload   // reset to initial state;
+            return action.payload;
         default:
             return state;
     }
 };
 
-export default function Modal({ open, setOpen }) {
+export default function Modal({ open, setOpen }: UploadFormProps) {
     const [loading, setLoading] = useState(false)
     const [state, dispatchForm] = useReducer(formReducer, initialState);
+    const [dynamicFields, setDynamicFields] = useState<DynamicFieldsInterface[]>([])
     const { mutate, isLoading } = useMutation(addItem, {
         onSuccess: data => {
             console.log(data);
@@ -58,8 +51,29 @@ export default function Modal({ open, setOpen }) {
         }
     });
     const handleSubmit = async () => {
+        let updateFormState = { ...state }
+        dynamicFields.forEach(item => {
+            updateFormState[item.key] = item.value
+        })
+        dispatchForm({ type: 'RESET', payload: updateFormState })
+        console.log(updateFormState)
         setLoading(true)
-        mutate(state)
+        mutate(updateFormState)
+    }
+
+    const handleDynamicFields = () => {
+        setDynamicFields(prevArray => [...prevArray, { key: '', value: '', id: v4() }])
+    }
+
+    const handleDynamicFieldChange = (e: React.ChangeEvent<HTMLInputElement>, type: string, id: string) => {
+        setDynamicFields(prevArray=>{
+            return prevArray.map(item=>{
+                if(item.id === id){
+                    return {...item, [type]: e.target.value}
+                }
+                return item
+            })
+        })
     }
 
     return (
@@ -128,6 +142,18 @@ export default function Modal({ open, setOpen }) {
                                                             <div className="w-full mt-2">
                                                                 <TextareaAutosize value={state.content} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => { dispatchForm({ type: 'UPDATE_CONTENT', payload: e.target.value }) }} className="py-1.5 px-2 rounded-md w-full bg-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 text-black border-transparent focus:border-transparent focus:ring-0" minRows={4} maxRows={8} style={{ resize: "none" }} />
                                                             </div>
+                                                        </div>
+                                                        {dynamicFields && dynamicFields.length > 0 && <div className='flex flex-col gap-5 h-[200px] px-1 py-2 overflow-y-auto'>
+                                                            {dynamicFields.map((field, index) => {
+                                                                return <div className='flex flex-col gap-5'>
+                                                                    <input type={'text'} value={field.key} placeholder='key' onChange={(e) => handleDynamicFieldChange(e, 'key', field.id)} className='py-1.5 px-2 w-[60%] rounded-md bg-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 text-black border-transparent focus:border-transparent focus:ring-0' />
+                                                                    <input type={'text'} value={field.value} placeholder='value' onChange={(e) => handleDynamicFieldChange(e, 'value', field.id)} className='py-1.5 px-2 rounded-md bg-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 text-black border-transparent focus:border-transparent focus:ring-0' />
+                                                                    <TrashIcon color='black' fontSize={'20px'} className='cursor-pointer text-sm w-8 h-8' onClick={()=>setDynamicFields(prev=>prev.filter(item=>item.id!==field.id))} />
+                                                                </div>
+                                                            })}
+                                                        </div>}
+                                                        <div onClick={handleDynamicFields} className='w-full border rounded cursor-pointer flex justify-center'>
+                                                            <PlusIcon color='black' fontSize={'20px'} className='text-sm w-8 h-8' />
                                                         </div>
                                                     </form>
                                                 </div>
