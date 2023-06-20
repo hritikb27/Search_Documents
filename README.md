@@ -1,6 +1,12 @@
 # Project Documentation: Document Management System
 
-This documentation provides instructions on how to run and use the Document Management System project. The Document Management System allows users to upload documents, define document properties, store them in Firebase Firestore, and utilize Redis caching for improved performance. The frontend is built using Next.js, Typescript, React-Query and Tailwind CSS is used for styling. Backend 
+This documentation provides instructions on how to run and use the Document Management System project. The Document Management System allows users to upload documents, define document properties, store them in Firebase Firestore, and utilize Redis caching for improved performance. The frontend is built using Next.js, Typescript, React-Query and Tailwind CSS is used for styling. Backend is built with NodeJs, ExpressJs, Firestore, Redis.
+
+Demo Video: 
+
+https://github.com/hritikb27/Search_Documents/assets/86529959/b58afbd0-5cda-482d-88c6-179f1354ebfb
+
+
 
 ## Table of Contents
 
