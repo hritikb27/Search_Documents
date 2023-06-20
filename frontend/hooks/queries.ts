@@ -12,7 +12,7 @@ const getItems = async (query: string) => {
 };
 
 const useItemsQuery = (query: string) => {
-    return useQuery(["items"], () => getItems(query), { refetchOnWindowFocus: false, enabled: false });
+    return useQuery([query], () => getItems(query), { refetchOnWindowFocus: false, enabled: false });
 };
 
 
