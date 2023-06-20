@@ -145,7 +145,7 @@ export default function FormModal({ open, setOpen }: UploadFormProps) {
                                                         </div>
                                                         {dynamicFields && dynamicFields.length > 0 && <div className='flex flex-col gap-5 h-[200px] px-1 py-2 overflow-y-auto'>
                                                             {dynamicFields.map((field, index) => {
-                                                                return <div className='flex flex-col gap-5'>
+                                                                return <div key={index} className='flex flex-col gap-5'>
                                                                     <input type={'text'} value={field.key} placeholder='key' onChange={(e) => handleDynamicFieldChange(e, 'key', field.id)} className='py-1.5 px-2 w-[60%] rounded-md bg-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 text-black border-transparent focus:border-transparent focus:ring-0' />
                                                                     <input type={'text'} value={field.value} placeholder='value' onChange={(e) => handleDynamicFieldChange(e, 'value', field.id)} className='py-1.5 px-2 rounded-md bg-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 text-black border-transparent focus:border-transparent focus:ring-0' />
                                                                     <TrashIcon color='black' fontSize={'20px'} className='cursor-pointer text-sm w-8 h-8' onClick={() => setDynamicFields(prev => prev.filter(item => item.id !== field.id))} />

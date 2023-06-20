@@ -8,6 +8,7 @@ export interface DynamicFieldsInterface {
 export interface FormState {
     name: string;
     content: string;
+    [key: string]: string;
 }
 
 export interface UploadFormProps {
