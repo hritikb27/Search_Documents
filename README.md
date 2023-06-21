@@ -3,6 +3,7 @@
 This documentation provides instructions on how to run and use the Document Management System project. The Document Management System allows users to upload documents, define document properties, store them in Firebase Firestore, and utilize Redis caching for improved performance. The frontend is built using **Next.js**, **Typescript**, **React-Query** and **Tailwind CSS** is used for styling. Backend is built with **NodeJs**, **ExpressJs**, **Firestore** and **Redis**.
 
 Demo Video Loom: https://www.loom.com/share/716ca812cd37440089308a778ddc0f25?sid=3a672351-17d4-4392-816a-2240afba6f26
+
 Demo Video:
 
 https://github.com/hritikb27/Search_Documents/assets/86529959/b58afbd0-5cda-482d-88c6-179f1354ebfb
